@@ -138,23 +138,23 @@ docker_temp_server_stop() {
 docker_verify_minimum_env() {
     if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
         mysql_error <<-'EOF'
-            Database is uninitialized and password option is not specified
-                You need to specify one of the following as an environment variable:
-                - MYSQL_ROOT_PASSWORD
-                - MYSQL_ALLOW_EMPTY_PASSWORD
-                - MYSQL_RANDOM_ROOT_PASSWORD
-        EOF
+			Database is uninitialized and password option is not specified
+				You need to specify one of the following as an environment variable:
+				- MYSQL_ROOT_PASSWORD
+				- MYSQL_ALLOW_EMPTY_PASSWORD
+				- MYSQL_RANDOM_ROOT_PASSWORD
+		EOF
     fi
 
     # This will prevent the CREATE USER from failing (and thus exiting with a half-initialized database)
     if [ "$MYSQL_USER" = 'root' ]; then
         mysql_error <<-'EOF'
-            MYSQL_USER="root", MYSQL_USER and MYSQL_PASSWORD are for configuring a regular user and cannot be used for the root user
-                Remove MYSQL_USER="root" and use one of the following to control the root user password:
-                - MYSQL_ROOT_PASSWORD
-                - MYSQL_ALLOW_EMPTY_PASSWORD
-                - MYSQL_RANDOM_ROOT_PASSWORD
-        EOF
+			MYSQL_USER="root", MYSQL_USER and MYSQL_PASSWORD are for configuring a regular user and cannot be used for the root user
+				Remove MYSQL_USER="root" and use one of the following to control the root user password:
+				- MYSQL_ROOT_PASSWORD
+				- MYSQL_ALLOW_EMPTY_PASSWORD
+				- MYSQL_RANDOM_ROOT_PASSWORD
+		EOF
     fi
 
     # warn when missing one of MYSQL_USER or MYSQL_PASSWORD
@@ -279,29 +279,29 @@ docker_setup_db() {
         # no, we don't care if read finds a terminating character in this heredoc
         # https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
         read -r -d '' rootCreate <<-EOSQL || true
-            CREATE USER 'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
-            GRANT ALL ON *.* TO 'root'@'${MYSQL_ROOT_HOST}' WITH GRANT OPTION ;
-        EOSQL
+			CREATE USER 'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
+			GRANT ALL ON *.* TO 'root'@'${MYSQL_ROOT_HOST}' WITH GRANT OPTION ;
+		EOSQL
     fi
 
     local passwordSet=
     # no, we don't care if read finds a terminating character in this heredoc (see above)
     read -r -d '' passwordSet <<-EOSQL || true
-        ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
-    EOSQL
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
+	EOSQL
 
     # tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is just now being set
     docker_process_sql --dont-use-mysql-root-password --database=mysql <<-EOSQL
-        -- What's done in this file shouldn't be replicated
-        --  or products like mysql-fabric won't work
-        SET @@SESSION.SQL_LOG_BIN=0;
+		-- What's done in this file shouldn't be replicated
+		--  or products like mysql-fabric won't work
+		SET @@SESSION.SQL_LOG_BIN=0;
 
-        ${passwordSet}
-        GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
-        FLUSH PRIVILEGES ;
-        ${rootCreate}
-        DROP DATABASE IF EXISTS test ;
-    EOSQL
+		${passwordSet}
+		GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
+		FLUSH PRIVILEGES ;
+		${rootCreate}
+		DROP DATABASE IF EXISTS test ;
+	EOSQL
 
     # Creates a custom database and user if specified
     if [ -n "$MYSQL_DATABASE" ]; then
@@ -326,9 +326,9 @@ _mysql_passfile() {
     # ie: --defaults-extra-file=<( _mysql_passfile )
     if [ '--dont-use-mysql-root-password' != "$1" ] && [ -n "$MYSQL_ROOT_PASSWORD" ]; then
         cat <<-EOF
-            [client]
-            password="${MYSQL_ROOT_PASSWORD}"
-        EOF
+			[client]
+			password="${MYSQL_ROOT_PASSWORD}"
+		EOF
     fi
 }
 
@@ -337,8 +337,8 @@ _mysql_passfile() {
 mysql_expire_root_user() {
     if [ -n "$MYSQL_ONETIME_PASSWORD" ]; then
         docker_process_sql --database=mysql <<-EOSQL
-            ALTER USER 'root'@'%' PASSWORD EXPIRE;
-        EOSQL
+			ALTER USER 'root'@'%' PASSWORD EXPIRE;
+		EOSQL
     fi
 }
 
