@@ -107,7 +107,9 @@ RUN set -eu; \
 # https://github.com/docker-library/mysql/pull/680#issuecomment-825930524
         echo 'module_hotfixes=true'; \
     } | tee /etc/yum.repos.d/mysql-community-tools.repo
+
 ENV MYSQL_SHELL_VERSION 8.0.36-1.el8
+
 RUN set -eux; \
     microdnf install -y "mysql-shell-$MYSQL_SHELL_VERSION"; \
     microdnf clean all; \
@@ -117,7 +119,7 @@ RUN set -eux; \
 VOLUME /var/lib/mysql
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+RUN ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 COPY healthcheck.sh /healthcheck.sh
