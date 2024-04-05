@@ -13,5 +13,7 @@ This repo creates a Docker image for [MySQL 8.x](https://mysql.com/).
 Version | Git branch | Tag name
 --------| ---------- |---------
 8.0.23  | master     | latest
+8.0.23  | 8.0.23     | 8.0.23
+
 
 ## to be continued ...
