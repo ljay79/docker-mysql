@@ -1,6 +1,6 @@
 # Docker image for MySQL Database Server
 
-> Based on https://github.com/mysql/mysql-docker/tree/mysql-server/8.0
+> Based on https://github.com/docker-library/mysql/tree/master/8.0
 
 [![](https://images.microbadger.com/badges/image/ljay/mysql.svg)](http://microbadger.com/images/ljay/mysql)
 
@@ -12,8 +12,8 @@ This repo creates a Docker image for [MySQL 8.x](https://mysql.com/).
 
 Version | Git branch | Tag name
 --------| ---------- |---------
-8.0.23  | master     | latest
-8.0.23  | 8.0.23     | 8.0.23
+8.0.36  | master     | latest
+8.0.36  | 8.0.36     | 8.0.36
 
 
 ## to be continued ...
